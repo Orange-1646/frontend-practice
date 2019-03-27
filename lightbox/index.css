@@ -1,0 +1,76 @@
+*{
+    margin: 0;
+}
+.box{
+    width: 90%;
+    margin: 100px auto;
+    
+}
+li{
+    padding: 0;
+    list-style: none;
+    display: inline-block;
+    width: 300px;
+    border: 3px solid #ccc;
+    cursor: pointer;
+    vertical-align:middle;
+}
+li img{
+    width: 300px;
+}
+.shadow{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.7);
+    display: none;
+}
+.show{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.show .bigView{
+    position: absolute;
+    top 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    text-align: center;
+    
+}
+
+.show .bigView img{
+    height: 100%;
+    border: 5px solid #ccc;
+    border-radius: 5px;
+}
+
+.show .btnView .btn{
+    position: absolute;
+    top: 5%;
+    width: 40px;
+    height: 40px;
+    
+}
+.show .btnView .btn.btn-close{
+    background: url(images/close.png) 100% 100% no-repeat;
+    top: 0;
+    right: 20px;
+}
+.show .btnView .btn.btn-prev{
+    background: url(images/prev.png) 100% 100% no-repeat;
+    top: 45%;
+    left: 20px;
+}
+.show .btnView .btn.btn-next{
+    background: url(images/next.png) 100% 100% no-repeat;
+    top: 45%;
+    right: 20px;
+}

@@ -1,0 +1,117 @@
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body{
+    width: 100%;
+    height: 1000px;
+    background: linear-gradient(to left top, #f5a1d5, #cdd3e9)
+}
+.card-stack{
+    position: relative;
+    width: 600px;
+    margin: 100px auto;
+    cursor: pointer;
+}
+
+.stack{
+    position: absolute;
+    left: 0;
+    transition: all 0.4s ease-in-out;
+}
+.card{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 200px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 1px 2px 2px #888;
+    transition: all 0.4s ease-in-out;
+    transition-delay: 0.4s;
+}
+
+.card img{
+    transition: all 0.4s ease-in-out;
+    transition-delay: 0.4s;
+    width: 100%;
+    height: 150px;
+}
+
+.card .con{
+    padding: 10px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 20px;
+}
+.card.card1{
+    z-index: 10;
+    transform: rotate(-2deg);
+}
+.card.card2{
+    z-index: 9;
+    transform: rotate(-7deg);
+}
+.card.card3{
+    z-index: 8;
+    transform: rotate(3deg);
+}
+
+.transition .stack1{
+    left: 0;
+}
+
+.transition .stack2{
+    left: 240px;
+}
+
+.transition .stack3{
+    left: 480px;
+}
+
+.transition .stack .card1{
+    transform: rotate(0deg);
+    top: 480px;
+}
+.transition .stack .card2{
+    transform: rotate(0deg);
+    top: 240px;
+}
+
+.transition .stack .card3{
+    transform: rotate(0deg);
+    top: 0;
+}
+
+.layer{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 0.4 ease-in-out; 
+}
+
+.layer.active{
+    background: #888;
+    opacity: 0.6;
+    z-index: 13;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

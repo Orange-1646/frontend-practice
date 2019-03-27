@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="myCalender.css">
+    <style>
+        .container {
+            width: 600px;
+            border: 1px solid black;
+        }
+
+        .date-header {
+            width: 100%;
+            height: 80px;
+            line-height: 80px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prev-month {
+            width: 0;
+            height: 0;
+            border-width: 40px;
+            border-style: solid;
+            border-color: transparent #0cf transparent transparent;
+            margin-left: -40px;
+        }
+
+        .next-month {
+            width: 0;
+            height: 0;
+            border-width: 40px;
+            border-style: solid;
+            border-color: transparent transparent transparent #0cf;
+            margin-right: -40px;
+        }
+
+        .show-date {
+            color: #0cf;
+            font-size: 30px;
+            font-weight: 100;
+            display: flex;
+            align-items: center;
+        }
+
+        .week-header {
+            display: flex;
+            background: #0cf;
+            justify-content: space-around;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .month-day {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            align-content: space-around;
+        }
+
+        .each-day {
+            width: 14.28%;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            font-weight: 400;
+        }
+        .each-day.active{
+            cursor: pointer;
+        }
+        .each-day.selected{
+            border: 3px solid blue;
+            font-weight: 800;
+            line-height: 44px;
+            box-sizing: border-box;
+        }
+
+        .each-day .today {
+            background: blue;
+            color: aliceblue;
+            font-weight: 800;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="date-header">
+                <div class="prev-month" @click="prevMonth"></div>
+                <div class="show-date">
+                    <span>{{`${focusYear}年${focusMonth}月${focusDate}日`}}</span>
+                    <button @click="reset">重置</button>
+                </div>
+                <div class="next-month" @click="nextMonth"></div>
+            </div>
+            <div class="date-content">
+                <div class="week-header">
+                    <div v-for="day in weekArr">{{day}}</div>
+                </div>
+                <div class="month-day">
+                    <div class="each-day" :class="[(focusDate === item - beginDay && focusDate > 0 && focusDate <= curDays ? 'selected' : ''), item - beginDay > 0 && item- beginDay <= curDays ? 'active' : '']" @click="setDay(item)" v-for="item in 42">
+                        <div v-if="(item - beginDay) <= 0" style="color : grey"> {{item - beginDay + getDayCount(monthBefore, yearBefore)}}</div>
+                        <div v-else-if="(item - beginDay) > curDays" style="color : grey">{{item - beginDay - curDays}}</div>
+                        <div :class="(date === (item - beginDay)&&focusMonth===month&&focusYear===year) ? 'today' : ''" v-else>{{item - beginDay}} </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                year: '',
+                month: '',
+                date: '',
+                focusMonth: '',
+                focusYear: '',
+                focusDate: '',
+                weekArr: ['日', '一', '二', '三', '四', '五', '六']
+            },
+            created() {
+                this.initDate()
+            },
+            methods: {
+                initDate() {
+                    let date = new Date()
+                    this.year = date.getFullYear()
+                    this.month = date.getMonth() + 1
+                    this.date = date.getDate()
+                    this.focusMonth = this.month
+                    this.focusYear = this.year
+                    this.focusDate = this.date
+                },
+                getDayCount(month = this.month, year = this.year) {
+                    let dayCount = 0
+                    if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
+                        dayCount = 31
+                    } else if ([4, 6, 9, 11].includes(month)) {
+                        dayCount = 30
+                    } else if (this._isLeapYear(year)) {
+                        dayCount = 29
+                    } else {
+                        dayCount = 28
+                    }
+                    return dayCount
+                },
+                _isLeapYear(year) {
+                    return ((year % 100 !== 0 && year % 4 === 0) || year % 400 === 0)
+                },
+                prevMonth() {
+                    this.focusDate = 1
+                    if (this.focusMonth === 1) {
+                        this.focusMonth = 12
+                        this.focusYear--
+                    } else {
+                        this.focusMonth--
+                    }
+                },
+                nextMonth() {
+                    this.focusDate = 1
+                    if (this.focusMonth === 12) {
+                        this.focusMonth = 1
+                        this.focusYear++
+                    } else {
+                        this.focusMonth++
+                    }
+                },
+                reset() {
+                    this.focusMonth = this.month
+                    this.focusYear = this.year
+                    this.focusDate = this.date
+                },
+                setDay(item) {
+                    if(item - this.beginDay <= 0 || item - this.beginDay > this.curDays ) return
+                    this.focusDate = item - this.beginDay
+                }
+            },
+            computed: {
+                monthBefore() {
+                    return this.focusMonth === 1 ? 12 : this.focusMonth - 1
+                },
+                yearBefore() {
+                    return this.focusMonth === 1 ? this.focusYear - 1 : this.focusYear
+                },
+                beginDay() {
+                    return new Date(this.focusYear, this.focusMonth - 1, 1).getDay()
+                },
+                curDays() {
+                    return new Date(this.focusYear, this.focusMonth, 0).getDate()
+                }
+            }
+        })
+    </script>
+</body>
+</html>
