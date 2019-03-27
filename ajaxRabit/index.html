@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+     * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 16px;
+            background-color: #F5F5F5;
+        }
+
+        .chatBox {
+            width: 600px;
+            height: 100%;
+            border: 1px solid #ddd;
+            margin: 0 auto;
+            position: relative;
+            background: #eee;
+        }
+
+        .name {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
+            background: grey;
+            color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .input-content {
+            position: absolute;
+            bottom: 0;
+            width: 590px;
+            padding: 5px;
+            line-height: 40px;
+            height: 40px;
+            background: #ddd;
+        }
+
+        .input-content input.inp {
+            width: 500px;
+            height: 30px;
+            font-size: 16px;
+            display: inline-block;
+            outline: none;
+        }
+
+        .input-content input.btn {
+            font-size: 16px;
+            margin-left: 20px;
+            /* width: 50px; */
+            padding: 5px 10px;
+            display: inline-block;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+            color: #eee;
+            /* border: 1px solid #bbb; */
+            background-color: #bbb;
+            box-shadow: 2px 3px 3px 0 #ccc;
+        }
+
+        .content {
+            position: absolute;
+            top: 40px;
+            height: calc(100% - 110px);
+            width: 580px;
+            padding: 10px;
+            overflow-y: scroll;
+            /* overflow: hidden; */
+        }
+
+        .content-wrapper {
+            position: absolute;
+            left: 50%;
+            margin-left: -290px;
+            width: 580px;
+
+        }
+
+        .content .talk {
+            width: 580px;
+            vertical-align: middle;
+            line-height: 30px;
+            padding: 5px 0;
+            display: inline-block;
+        }
+
+        .rabit {
+            text-align: left;
+            padding: 5px 0;
+        }
+
+        .mine {
+            text-align: right;
+            vertical-align: middle;
+            padding: 5px 0;
+        }
+
+        .mine div,
+        .rabit div {
+            display: inline-block;
+        }
+
+        .avitor-rabit {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: aqua;
+            float: left;
+            background-image: url('./dog1.jpg');
+            background-size: 100% 100%;
+        }
+
+        .rabit .text {
+            float: left;
+            max-width: 230px;
+            word-wrap: break-word;
+        }
+
+        .avitor-mine {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: aqua;
+            float: right;
+            background-image: url('./3.png');
+            background-size: 100% 100%;
+
+        }
+
+        .mine .text {
+            float: right;
+            max-width: 230px;
+            word-wrap: break-word;
+            background-color: greenyellow;
+        }
+
+        .text {
+            background-color: #fff;
+            padding: 0 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatBox">
+        <p class="name">小渡机器人</p>
+        <div class="content">
+            <div class="content-wrapper">
+                <div class="mine talk">
+                    <div class="avitor-mine"></div>
+                    <div class="text">今天天气怎么样？</div>
+                </div>
+                <div class="rabit talk">
+                    <div class="avitor avitor-rabit"></div>
+                    <div class="text">西北风3-4级 最低气温零下4度, 最高气温5度</div>
+                </div>
+            </div>
+        </div>
+        <div class="input-content">
+            <input type="text" class="inp">
+            <input type="button" class="btn" value="发送">
+        </div>
+    </div>
+    <script src="./jquery-3.3.1.js"></script>
+    <!-- <script src="http://www.baidu.com/?cb=aa">
+    </script> -->
+    <script>
+        // 请求数据
+        function aa (data) {
+            console.log('aa',data);
+        }
+
+
+
+        function getData(val) {
+            var oContent = $('.content');
+            $.ajax({
+                type: 'GET',
+                url: './test.txt',
+                data: {
+                    text: val,
+                },
+                async: false,
+                dataType: 'jsonp',
+                context: oContent,
+                jsonp: 'callback',
+                jsonpCallback: 'aa',
+                beforeSend: function (e) {
+                    // XMLHttpRequest
+                    console.log('---beforesend---', e);
+                    // LOADING
+                }
+            });
+        }
+        // 绑定事件
+        function bindEvent() {
+            $('.inp').on('keydown',function (e) {
+                if (e.keyCode === 13) {
+                   $('.btn').trigger('click');
+                }
+            });
+            $('.btn').on('click', function (e) {
+                var val = $('.inp').val();
+                if (val) {
+                    renderDom(val, 'mine');
+                    getData(val);
+                }
+            });
+        }
+        //  像页面种插入数据
+        function renderDom(text, str) {
+            if (str == 'mine') {
+                var dom = $('<div class="mine talk">\
+                                <div class="avitor-mine"></div>\
+                                <div class="text">' + text +'</div>\
+                            </div>');
+            } else {
+                var dom = $(' <div class="rabit talk">\
+                    <div class="avitor avitor-rabit"></div>\
+                    <div class="text">' + text +'</div>\
+                </div>');
+            }
+            $('.content-wrapper').append(dom);
+            $('.inp').val('');
+        }
+        bindEvent();
+    </script>
+</body>
+</html>
